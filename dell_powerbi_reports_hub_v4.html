@@ -1,0 +1,724 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0a0e1a;--navy2:#0f1628;--navy3:#141c35;--navy4:#1a2340;
+  --card:#16203a;--card2:#1c2b4a;--border:#2a3a5c;--border2:#3a4d70;
+  --dell-blue:#007db8;--dell-blue2:#0098db;
+  --text:#e8edf5;--text2:#a0afc5;--text3:#6a7d9a;
+  --csg:#378add;--isg:#7f77dd;--care:#639922;--field:#ba7517;--rta:#1d9e75;
+}
+body.light-mode{
+  --navy:#f0f4f8;--navy2:#ffffff;--navy3:#f5f7fa;--navy4:#e8edf5;
+  --card:#ffffff;--card2:#f0f4f8;--border:#d0daea;--border2:#b0c4da;
+  --dell-blue:#0076CE;--dell-blue2:#005fa3;
+  --text:#0d1b2e;--text2:#3a5068;--text3:#7090a8;
+  --csg:#1a6bc4;--isg:#5147b0;--care:#3d7010;--field:#8a5200;--rta:#0d7055;
+}
+body{font-family:'Poppins',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;font-size:13px;transition:background .3s,color .3s}
+.hub{display:flex;min-height:100vh}
+.sidebar{width:204px;min-width:204px;background:var(--navy2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;transition:background .3s,border-color .3s}
+.sidebar-logo{padding:14px 16px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.dell-title{font-size:10.5px;font-weight:600;color:var(--text);line-height:1.3}
+.dell-sub{font-size:9px;color:var(--text3);font-weight:400}
+.sidebar-nav{padding:12px 0;flex:1}
+.nav-section{font-size:9px;font-weight:600;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;padding:8px 20px 4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;transition:all .2s;color:var(--text2);font-size:12px;font-weight:400;border-left:2px solid transparent}
+.nav-item:hover{background:var(--navy3);color:var(--text)}
+.nav-item.active{background:rgba(0,125,184,.12);color:var(--dell-blue2);border-left-color:var(--dell-blue2)}
+.nav-item i{font-size:15px;width:18px;text-align:center}
+.nav-badge{margin-left:auto;background:var(--dell-blue);color:#fff;font-size:8px;font-weight:700;border-radius:8px;padding:1px 6px;min-width:16px;text-align:center}
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.header{background:var(--navy2);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;transition:background .3s}
+.header-title{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap}
+.header-title span{color:var(--dell-blue2)}
+.search-bar{flex:1;max-width:340px;position:relative}
+.search-bar input{width:100%;background:var(--navy3);border:1px solid var(--border);border-radius:6px;padding:7px 12px 7px 32px;color:var(--text);font-size:12px;font-family:'Poppins',sans-serif;outline:none;transition:.2s}
+.search-bar input:focus{border-color:var(--dell-blue);background:var(--navy4)}
+.search-bar i{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px}
+.header-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+.icon-btn{width:32px;height:32px;border-radius:6px;background:var(--navy3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);transition:.2s;font-size:15px;position:relative}
+.icon-btn:hover{border-color:var(--dell-blue);color:var(--dell-blue2)}
+.notif-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:#e24b4a;font-size:8px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--navy2)}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--dell-blue),#004f75);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;cursor:pointer;border:1.5px solid var(--dell-blue)}
+.theme-toggle{display:flex;align-items:center;background:var(--navy3);border:1px solid var(--border);border-radius:20px;padding:3px;gap:2px;cursor:pointer}
+.theme-opt{padding:4px 9px;border-radius:14px;font-size:10px;font-weight:500;color:var(--text3);transition:.2s;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.theme-opt.active{background:var(--dell-blue);color:#fff}
+.theme-opt i{font-size:12px}
+.content{flex:1;overflow-y:auto;padding:18px 20px}
+.status-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.stat-pill{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px;transition:.15s;cursor:pointer}
+.stat-pill:hover{border-color:var(--dell-blue);background:var(--card2);transform:translateY(-1px)}
+.stat-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.stat-icon.blue{background:rgba(0,125,184,.15);color:var(--dell-blue2)}
+.stat-icon.green{background:rgba(99,153,34,.15);color:#4a9e1a}
+.stat-icon.amber{background:rgba(186,117,23,.15);color:#cf8a10}
+.stat-icon.red{background:rgba(226,75,74,.15);color:#e24b4a}
+.stat-label{font-size:10px;color:var(--text3);font-weight:500;letter-spacing:.3px;margin-bottom:2px}
+.stat-value{font-size:20px;font-weight:600;color:var(--text);line-height:1}
+.stat-sub{font-size:9px;color:var(--text3);margin-top:2px}
+.filter-row{display:flex;align-items:center;gap:7px;margin-bottom:14px;flex-wrap:wrap}
+.filter-chip{padding:5px 13px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:11px;font-weight:500;cursor:pointer;transition:.2s;font-family:'Poppins',sans-serif}
+.filter-chip:hover{border-color:var(--border2);color:var(--text)}
+.filter-chip.active{background:rgba(0,125,184,.18);border-color:var(--dell-blue);color:var(--dell-blue2)}
+.filter-chip.csg-chip.active{background:rgba(55,138,221,.13);border-color:var(--csg);color:var(--csg)}
+.filter-chip.isg-chip.active{background:rgba(127,119,221,.13);border-color:var(--isg);color:var(--isg)}
+.filter-chip.care-chip.active{background:rgba(99,153,34,.13);border-color:var(--care);color:var(--care)}
+.filter-chip.field-chip.active{background:rgba(186,117,23,.13);border-color:var(--field);color:var(--field)}
+.filter-chip.rta-chip.active{background:rgba(29,158,117,.13);border-color:var(--rta);color:var(--rta)}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;margin-top:4px}
+.section-title{font-size:12px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:7px}
+.section-bar{width:3px;height:15px;border-radius:2px}
+.view-all{font-size:11px;color:var(--dell-blue2);cursor:pointer;font-weight:500;opacity:.8;transition:.15s;display:flex;align-items:center;gap:3px}
+.view-all:hover{opacity:1}
+.section-count{font-size:10px;color:var(--text3);font-weight:400;margin-left:3px}
+.featured-scroll{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.report-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.report-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .2s;position:relative}
+.report-card:hover{transform:translateY(-2px);border-color:var(--border2);background:var(--card2)}
+.report-card .fav-btn{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.35);border:none;border-radius:4px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;transition:.2s;color:#888}
+body.light-mode .report-card .fav-btn{background:rgba(255,255,255,.55);color:#aaa}
+.report-card .fav-btn:hover,.report-card .fav-btn.fav-on{color:#f5c400}
+.card-thumb{height:86px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.thumb-csg{background:linear-gradient(135deg,rgba(55,138,221,.18),rgba(4,44,83,.55))}
+.thumb-isg{background:linear-gradient(135deg,rgba(127,119,221,.18),rgba(38,33,92,.55))}
+.thumb-care{background:linear-gradient(135deg,rgba(99,153,34,.18),rgba(23,52,4,.55))}
+.thumb-field{background:linear-gradient(135deg,rgba(186,117,23,.18),rgba(65,36,2,.55))}
+.thumb-rta{background:linear-gradient(135deg,rgba(29,158,117,.18),rgba(4,52,44,.55))}
+body.light-mode .thumb-csg{background:linear-gradient(135deg,rgba(55,138,221,.15),rgba(220,235,255,.9))}
+body.light-mode .thumb-isg{background:linear-gradient(135deg,rgba(127,119,221,.15),rgba(230,228,255,.9))}
+body.light-mode .thumb-care{background:linear-gradient(135deg,rgba(99,153,34,.15),rgba(220,240,200,.9))}
+body.light-mode .thumb-field{background:linear-gradient(135deg,rgba(186,117,23,.15),rgba(255,240,210,.9))}
+body.light-mode .thumb-rta{background:linear-gradient(135deg,rgba(29,158,117,.15),rgba(200,240,228,.9))}
+.card-body{padding:11px 12px 10px}
+.dept-tag{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:600;letter-spacing:.5px;padding:2px 8px;border-radius:3px;margin-bottom:6px;text-transform:uppercase}
+.tag-csg{background:rgba(55,138,221,.13);color:#378add;border:1px solid rgba(55,138,221,.25)}
+.tag-isg{background:rgba(127,119,221,.13);color:#7f77dd;border:1px solid rgba(127,119,221,.25)}
+.tag-care{background:rgba(99,153,34,.13);color:#4a9e1a;border:1px solid rgba(99,153,34,.25)}
+.tag-field{background:rgba(186,117,23,.13);color:#ba7517;border:1px solid rgba(186,117,23,.25)}
+.tag-rta{background:rgba(29,158,117,.13);color:#1d9e75;border:1px solid rgba(29,158,117,.25)}
+body.light-mode .tag-csg{color:#1a6bc4} body.light-mode .tag-isg{color:#5147b0}
+body.light-mode .tag-care{color:#3d7010} body.light-mode .tag-field{color:#8a5200} body.light-mode .tag-rta{color:#0d7055}
+.card-name{font-size:11px;font-weight:500;color:var(--text);line-height:1.35;margin-bottom:7px;min-height:30px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.status-chip{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:500;padding:2px 8px;border-radius:10px}
+.s-published{background:rgba(74,158,26,.13);color:#4a9e1a}
+.s-pending{background:rgba(186,117,23,.13);color:#cf8a10}
+.s-wip{background:rgba(226,75,74,.13);color:#e24b4a}
+.s-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.s-dot.green{background:#4a9e1a}.s-dot.amber{background:#cf8a10}.s-dot.red{background:#e24b4a}
+.freq-badge{font-size:9px;color:var(--text3);display:flex;align-items:center;gap:3px}
+.card-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:7px}
+.pub-info{font-size:9.5px;color:var(--text3);display:flex;align-items:center;gap:4px}
+.open-btn{background:rgba(0,125,184,.13);border:1px solid rgba(0,125,184,.28);border-radius:4px;padding:4px 9px;font-size:9px;font-weight:500;color:var(--dell-blue2);cursor:pointer;font-family:'Poppins',sans-serif;transition:.15s;display:flex;align-items:center;gap:3px}
+.open-btn:hover{background:rgba(0,125,184,.26);border-color:var(--dell-blue2)}
+.dept-divider{height:1px;background:var(--border);margin:22px 0;opacity:.5}
+.hidden{display:none!important}
+.no-results{text-align:center;padding:36px;color:var(--text3);font-size:13px}
+.sort-bar{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.sort-label{font-size:10px;color:var(--text3);font-weight:500}
+.sort-btn{padding:3px 10px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:10px;cursor:pointer;font-family:'Poppins',sans-serif;transition:.15s}
+.sort-btn:hover,.sort-btn.active{border-color:var(--dell-blue);color:var(--dell-blue2);background:rgba(0,125,184,.1)}
+.freq-chip{padding:4px 11px;border-radius:14px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;font-weight:500;cursor:pointer;transition:.2s;font-family:'Poppins',sans-serif}
+.freq-chip:hover{border-color:var(--border2);color:var(--text2)}
+.freq-chip.active{background:rgba(0,125,184,.12);border-color:var(--dell-blue);color:var(--dell-blue2)}
+
+/* OVERLAY */
+.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(5,10,25,.88);z-index:200;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:20px}
+body.light-mode .overlay{background:rgba(30,50,80,.7)}
+.modal{background:var(--navy2);border:1px solid var(--border2);border-radius:14px;width:100%;max-width:820px;overflow:hidden;animation:fadeUp .22s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.modal-close{position:absolute;top:12px;right:14px;background:rgba(255,255,255,.08);border:none;border-radius:6px;width:26px;height:26px;color:var(--text2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;z-index:10;transition:.15s}
+.modal-close:hover{background:rgba(226,75,74,.2);color:#e24b4a}
+body.light-mode .modal-close{background:rgba(0,0,0,.06)}
+
+/* ESG */
+.esg-hero{background:linear-gradient(135deg,#0063a6 0%,#00b5b5 60%,#0097a7 100%);padding:36px 36px 46px;position:relative;overflow:hidden}
+.esg-hero-pill{background:rgba(255,255,255,.95);border-radius:28px;display:inline-flex;align-items:center;gap:12px;padding:9px 24px 9px 14px;margin-top:14px}
+.esg-hero-pill-title{font-size:17px;font-weight:600;color:#1a1a2e}
+.esg-hero-nav{display:flex;gap:7px;margin-top:9px;position:relative;z-index:2;flex-wrap:wrap}
+.esg-nav-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:6px;padding:5px 14px;font-size:11px;font-weight:500;cursor:pointer;font-family:'Poppins',sans-serif;transition:.2s}
+.esg-nav-btn:hover,.esg-nav-btn.esg-active{background:rgba(255,255,255,.3);border-color:rgba(255,255,255,.7)}
+.esg-body{padding:22px 26px;display:grid;grid-template-columns:1fr 210px;gap:22px}
+.esg-section-title{font-size:11px;font-weight:600;color:var(--text2);display:flex;align-items:center;gap:6px;margin-bottom:7px}
+.esg-overview-text{font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:14px}
+.esg-bullet{font-size:11.5px;color:var(--text2);padding:3px 0;display:flex;align-items:center;gap:8px}
+.esg-bullet::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--dell-blue2);flex-shrink:0}
+.esg-metrics-grid{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.esg-metric-tag{background:rgba(0,125,184,.12);border:1px solid rgba(0,125,184,.25);border-radius:4px;padding:3px 10px;font-size:10px;color:var(--dell-blue2);font-weight:500}
+.esg-meta-card{background:var(--navy3);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:9px;display:flex;align-items:flex-start;gap:10px}
+.esg-meta-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.esg-meta-label{font-size:10px;color:var(--text3);margin-bottom:2px}
+.esg-meta-value{font-size:12px;font-weight:500;color:var(--text)}
+.esg-footer{padding:12px 26px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.esg-proceed-btn{background:var(--dell-blue);border:none;border-radius:6px;padding:8px 20px;font-size:12px;font-weight:600;color:#fff;cursor:pointer;font-family:'Poppins',sans-serif;display:flex;align-items:center;gap:6px;transition:.2s}
+.esg-proceed-btn:hover{background:var(--dell-blue2)}
+.esg-cons-header{background:var(--navy3);padding:9px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.esg-cons-title{font-size:12px;font-weight:600;color:var(--text);text-align:center;flex:1}
+.last-refresh{font-size:9px;color:var(--text3)}
+.clear-btn{background:rgba(55,138,221,.13);border:1px solid rgba(55,138,221,.28);border-radius:4px;padding:4px 10px;font-size:9px;color:var(--dell-blue2);cursor:pointer;font-family:'Poppins',sans-serif}
+.filter-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:9px 12px;background:var(--navy3);border-bottom:1px solid var(--border)}
+.filter-select{background:var(--navy4);border:1px solid var(--border);border-radius:4px;padding:4px 7px;color:var(--text2);font-size:9px;font-family:'Poppins',sans-serif;outline:none;cursor:pointer;width:100%}
+.filter-label{font-size:8.5px;color:var(--text3);margin-bottom:2px;font-weight:500}
+.cons-body{padding:10px 12px;overflow-x:auto}
+.cons-table{width:100%;border-collapse:collapse;font-size:9px;min-width:580px}
+.cons-table th{background:#1e3a6e;color:#b8d0f0;padding:5px 7px;text-align:center;font-weight:600;border:1px solid rgba(55,138,221,.2);white-space:nowrap}
+body.light-mode .cons-table th{background:#1a6bc4;color:#fff}
+.cons-table th.left{text-align:left}
+.cons-table td{padding:4px 7px;border:1px solid rgba(42,58,92,.4);color:var(--text2);white-space:nowrap}
+body.light-mode .cons-table td{border-color:rgba(180,200,220,.4)}
+.cons-table tr:nth-child(even){background:rgba(26,35,64,.25)}
+body.light-mode .cons-table tr:nth-child(even){background:rgba(240,244,250,.6)}
+.cons-table .row-header{font-weight:500;color:var(--text);background:rgba(30,58,110,.35)}
+body.light-mode .cons-table .row-header{background:rgba(200,220,240,.4)}
+.cons-table .group-header{background:#1a2d5a;color:var(--dell-blue2);font-weight:600;font-size:9.5px}
+body.light-mode .cons-table .group-header{background:#d8eaf8;color:var(--dell-blue)}
+.val-green{color:#4a9e1a;font-weight:500}.val-red{color:#e24b4a;font-weight:500}.val-blue{color:#6ab0ee;font-weight:500}
+body.light-mode .val-blue{color:#1a6bc4}
+
+/* REPORT LIST */
+.report-list-modal{background:var(--navy2);border:1px solid var(--border2);border-radius:14px;width:100%;max-width:580px;overflow:hidden;animation:fadeUp .22s ease;position:relative}
+.rlist-header{background:var(--navy3);padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.rlist-title{font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:7px}
+.rlist-body{padding:14px 18px;max-height:400px;overflow-y:auto}
+.rlist-item{display:flex;align-items:center;justify-content:space-between;padding:9px 11px;border-radius:7px;border:1px solid var(--border);margin-bottom:7px;background:var(--card);transition:.15s}
+.rlist-item:hover{border-color:var(--border2);background:var(--card2)}
+.rlist-name{font-size:11px;font-weight:500;color:var(--text);margin-bottom:3px}
+.rlist-meta{font-size:10px;color:var(--text3);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+
+/* NOTIF */
+.notif-dropdown{position:absolute;top:40px;right:0;background:var(--navy2);border:1px solid var(--border2);border-radius:10px;width:276px;z-index:300;animation:fadeUp .18s ease;box-shadow:0 8px 28px rgba(0,0,0,.4)}
+.notif-header{padding:11px 15px;border-bottom:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text);display:flex;align-items:center;justify-content:space-between}
+.notif-item{padding:11px 15px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:9px;cursor:pointer;transition:.15s}
+.notif-item:hover{background:var(--navy3)}
+.notif-dot{width:8px;height:8px;border-radius:50%;background:var(--dell-blue2);margin-top:4px;flex-shrink:0}
+.notif-text{font-size:11px;color:var(--text2);line-height:1.5}
+.notif-time{font-size:9px;color:var(--text3);margin-top:2px}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--navy2);border:1px solid var(--border2);border-radius:8px;padding:10px 16px;font-size:12px;color:var(--text);z-index:999;display:flex;align-items:center;gap:8px;animation:fadeUp .2s ease;box-shadow:0 4px 20px rgba(0,0,0,.4);max-width:280px}
+
+/* ESG COMMENTS / EMAIL PANEL */
+.esg-panel-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--navy3)}
+.esg-panel-tab{padding:10px 18px;font-size:11px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:.2s;display:flex;align-items:center;gap:5px}
+.esg-panel-tab:hover{color:var(--text2)}
+.esg-panel-tab.ptab-active{color:var(--dell-blue2);border-bottom-color:var(--dell-blue2)}
+.esg-panel-body{padding:18px 22px;max-height:320px;overflow-y:auto}
+.comment-input-wrap{background:var(--navy3);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:12px;transition:.2s}
+.comment-input-wrap:focus-within{border-color:var(--dell-blue)}
+.comment-input-wrap textarea{width:100%;background:transparent;border:none;padding:10px 12px;color:var(--text);font-size:12px;font-family:'Poppins',sans-serif;outline:none;resize:none;min-height:72px}
+.comment-input-wrap textarea::placeholder{color:var(--text3)}
+.comment-actions{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-top:1px solid var(--border)}
+.comment-tag-row{display:flex;gap:6px;flex-wrap:wrap}
+.ctag{padding:3px 9px;border-radius:12px;font-size:9.5px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text3);font-family:'Poppins',sans-serif;transition:.15s}
+.ctag:hover,.ctag.ctag-on{background:rgba(226,75,74,.12);border-color:rgba(226,75,74,.4);color:#e24b4a}
+.send-comment-btn{background:var(--dell-blue);border:none;border-radius:5px;padding:5px 14px;font-size:10px;font-weight:600;color:#fff;cursor:pointer;font-family:'Poppins',sans-serif;transition:.2s;display:flex;align-items:center;gap:4px}
+.send-comment-btn:hover{background:var(--dell-blue2)}
+.comment-item{border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px;background:var(--card)}
+.comment-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.comment-author{font-size:10px;font-weight:600;color:var(--dell-blue2);display:flex;align-items:center;gap:5px}
+.comment-time{font-size:9px;color:var(--text3)}
+.comment-text{font-size:11.5px;color:var(--text2);line-height:1.6}
+.comment-badge{font-size:8.5px;padding:2px 7px;border-radius:8px;font-weight:500}
+.cb-discrepancy{background:rgba(226,75,74,.12);color:#e24b4a;border:1px solid rgba(226,75,74,.25)}
+.cb-query{background:rgba(186,117,23,.12);color:#cf8a10;border:1px solid rgba(186,117,23,.25)}
+.cb-feedback{background:rgba(0,125,184,.12);color:var(--dell-blue2);border:1px solid rgba(0,125,184,.25)}
+/* EMAIL FORM */
+.email-form-row{margin-bottom:12px}
+.email-form-label{font-size:10px;font-weight:600;color:var(--text3);margin-bottom:4px}
+.email-form-input{width:100%;background:var(--navy3);border:1px solid var(--border);border-radius:6px;padding:7px 11px;color:var(--text);font-size:12px;font-family:'Poppins',sans-serif;outline:none;transition:.2s}
+.email-form-input:focus{border-color:var(--dell-blue)}
+.email-form-input::placeholder{color:var(--text3)}
+.email-form-textarea{width:100%;background:var(--navy3);border:1px solid var(--border);border-radius:6px;padding:8px 11px;color:var(--text);font-size:12px;font-family:'Poppins',sans-serif;outline:none;resize:none;min-height:80px;transition:.2s}
+.email-form-textarea:focus{border-color:var(--dell-blue)}
+.email-form-textarea::placeholder{color:var(--text3)}
+.email-send-btn{background:var(--dell-blue);border:none;border-radius:6px;padding:8px 20px;font-size:11px;font-weight:600;color:#fff;cursor:pointer;font-family:'Poppins',sans-serif;display:flex;align-items:center;gap:6px;transition:.2s}
+.email-send-btn:hover{background:var(--dell-blue2)}
+.email-priority-row{display:flex;gap:7px;margin-bottom:12px}
+.eprio{padding:4px 12px;border-radius:12px;border:1px solid var(--border);background:transparent;font-size:10px;font-weight:500;cursor:pointer;color:var(--text3);font-family:'Poppins',sans-serif;transition:.15s}
+.eprio:hover{border-color:var(--border2);color:var(--text2)}
+.eprio.eprio-on.low{background:rgba(74,158,26,.12);border-color:#4a9e1a;color:#4a9e1a}
+.eprio.eprio-on.med{background:rgba(186,117,23,.12);border-color:#cf8a10;color:#cf8a10}
+.eprio.eprio-on.high{background:rgba(226,75,74,.12);border-color:#e24b4a;color:#e24b4a}
+
+/* USAGE METRICS */
+.usage-modal{background:var(--navy2);border:1px solid var(--border2);border-radius:14px;width:100%;max-width:720px;overflow:hidden;animation:fadeUp .22s ease;position:relative}
+.usage-header{background:var(--navy3);padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.usage-header-left{display:flex;align-items:center;gap:10px}
+.usage-title{font-size:14px;font-weight:600;color:var(--text)}
+.usage-subtitle{font-size:10px;color:var(--text3);margin-top:2px}
+.usage-body{padding:20px 22px;max-height:520px;overflow-y:auto}
+.usage-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.ukpi{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:12px 14px;text-align:center}
+.ukpi-val{font-size:22px;font-weight:700;color:var(--text);line-height:1.1}
+.ukpi-lbl{font-size:10px;color:var(--text3);margin-top:3px}
+.ukpi-trend{font-size:9px;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:3px}
+.trend-up{color:#4a9e1a}.trend-dn{color:#e24b4a}
+.usage-section-title{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.usage-table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:20px}
+.usage-table th{text-align:left;padding:7px 10px;font-size:9.5px;font-weight:600;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.usage-table td{padding:8px 10px;border-bottom:1px solid rgba(42,58,92,.3);color:var(--text2);vertical-align:middle}
+body.light-mode .usage-table td{border-bottom-color:rgba(200,215,230,.5)}
+.usage-table tr:hover td{background:var(--card2)}
+.usage-bar-cell{width:120px}
+.ubar-track{height:4px;background:var(--navy3);border-radius:2px;overflow:hidden}
+.ubar-fill{height:100%;border-radius:2px;transition:width .5s ease}
+.usage-rank{font-size:9px;font-weight:700;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.rank-1{background:rgba(197,159,0,.18);color:#c9a600}
+.rank-2{background:rgba(160,175,196,.18);color:#a0afc5}
+.rank-3{background:rgba(186,117,23,.18);color:#ba7517}
+.rank-other{background:var(--navy3);color:var(--text3)}
+.dept-usage-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px}
+.dept-usage-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 10px;text-align:center}
+.du-val{font-size:18px;font-weight:700;color:var(--text);line-height:1.1}
+.du-lbl{font-size:9.5px;color:var(--text3);margin-top:3px}
+.du-bar{height:3px;border-radius:2px;margin-top:7px}
+.weekly-chart{margin-bottom:20px}
+.wc-bars{display:flex;align-items:flex-end;gap:4px;height:60px}
+.wc-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.wc-bar{width:100%;border-radius:2px 2px 0 0;transition:height .5s}
+.wc-lbl{font-size:8px;color:var(--text3)}
+.wc-val{font-size:8.5px;color:var(--text2);font-weight:500}
+</style>
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Dell Power BI Reports Hub v4</h2>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+
+<div class="hub" id="hub">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <svg width="48" height="48" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="46" fill="white" stroke="#0076CE" stroke-width="5"/>
+        <text x="50" y="65" text-anchor="middle" font-family="Georgia,serif" font-size="34" font-weight="900" fill="#0076CE" letter-spacing="-1">Dell</text>
+      </svg>
+      <div><div class="dell-title">Power BI</div><div class="dell-sub">Reports Hub</div></div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-section">Navigation</div>
+      <div class="nav-item active" id="nav-home" onclick="navClick('home')"><i class="ti ti-layout-dashboard"></i>Home</div>
+      <div class="nav-item" id="nav-csg" onclick="navClick('csg')"><i class="ti ti-device-desktop-analytics" style="color:var(--csg)"></i>CSG<span class="nav-badge" id="nb-csg">—</span></div>
+      <div class="nav-item" id="nav-isg" onclick="navClick('isg')"><i class="ti ti-server" style="color:var(--isg)"></i>ISG<span class="nav-badge" id="nb-isg" style="background:var(--isg)">—</span></div>
+      <div class="nav-item" id="nav-care" onclick="navClick('care')"><i class="ti ti-heart-handshake" style="color:var(--care)"></i>Care<span class="nav-badge" id="nb-care" style="background:var(--care)">—</span></div>
+      <div class="nav-item" id="nav-field" onclick="navClick('field')"><i class="ti ti-map-pin" style="color:var(--field)"></i>Field<span class="nav-badge" id="nb-field" style="background:var(--field)">—</span></div>
+      <div class="nav-item" id="nav-rta" onclick="navClick('rta')"><i class="ti ti-calendar-stats" style="color:var(--rta)"></i>RTA &amp; Scheduling<span class="nav-badge" id="nb-rta" style="background:var(--rta)">—</span></div>
+      <div class="nav-section" style="margin-top:8px">Personal</div>
+      <div class="nav-item" id="nav-fav" onclick="navClick('fav')"><i class="ti ti-star"></i>Favorites<span class="nav-badge" id="nb-fav" style="background:#c9a600">3</span></div>
+      <div class="nav-item" id="nav-recent" onclick="navClick('recent')"><i class="ti ti-history"></i>Recently Viewed</div>
+      <div class="nav-item" id="nav-usage" onclick="openUsageMetrics()"><i class="ti ti-chart-bar"></i>Usage Metrics</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <div class="header-title">Dell <span>Power BI</span> Reports Hub</div>
+      <div class="search-bar">
+        <i class="ti ti-search"></i>
+        <input type="text" placeholder="Search reports, departments..." id="searchInput" oninput="handleSearch()">
+      </div>
+      <div class="header-actions">
+        <div class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode">
+          <div class="theme-opt active" id="topt-dark"><i class="ti ti-moon"></i>Dark</div>
+          <div class="theme-opt" id="topt-light"><i class="ti ti-sun"></i>Light</div>
+        </div>
+        <div class="icon-btn" id="notifBtn" onclick="toggleNotif()" style="position:relative" title="Notifications">
+          <i class="ti ti-bell"></i>
+          <div class="notif-badge" id="notifBadge">2</div>
+          <div class="notif-dropdown hidden" id="notifDropdown" onclick="event.stopPropagation()">
+            <div class="notif-header"><span>Notifications</span><span style="font-size:10px;color:var(--dell-blue2);cursor:pointer" onclick="clearNotif()">Mark all read</span></div>
+            <div class="notif-item"><div class="notif-dot"></div><div><div class="notif-text"><strong>ESG Combined View</strong> published and now live.</div><div class="notif-time">2 hrs ago · ISG</div></div></div>
+            <div class="notif-item"><div class="notif-dot" style="background:#4a9e1a"></div><div><div class="notif-text">Weekly refresh completed for <strong>Voice Queue KPI</strong></div><div class="notif-time">5 hrs ago · CSG</div></div></div>
+            <div class="notif-item" style="border-bottom:none"><div class="notif-dot" style="background:#cf8a10"></div><div><div class="notif-text"><strong>3 reports</strong> have Refresh Pending status</div><div class="notif-time">Today · All depts</div></div></div>
+          </div>
+        </div>
+        <div class="icon-btn" title="Export" onclick="showToast('Export coming soon','warn')"><i class="ti ti-download"></i></div>
+        <div class="icon-btn" title="Settings" onclick="showToast('Settings coming soon','warn')"><i class="ti ti-settings"></i></div>
+        <div class="avatar" title="Hrishikesh Yadav" onclick="showToast('Hrishikesh Yadav · ISG Analyst','info')">HY</div>
+      </div>
+    </div>
+
+    <div class="content" id="mainContent">
+      <div class="status-strip">
+        <div class="stat-pill" onclick="showReportList('all')">
+          <div class="stat-icon blue"><i class="ti ti-file-analytics"></i></div>
+          <div><div class="stat-label">Total Reports</div><div class="stat-value">55</div><div class="stat-sub">Click to view all</div></div>
+        </div>
+        <div class="stat-pill" onclick="showReportList('published')">
+          <div class="stat-icon green"><i class="ti ti-circle-check"></i></div>
+          <div><div class="stat-label">Published</div><div class="stat-value" id="pubCount">—</div><div class="stat-sub">Click to view list</div></div>
+        </div>
+        <div class="stat-pill" onclick="showReportList('pending')">
+          <div class="stat-icon amber"><i class="ti ti-clock-pause"></i></div>
+          <div><div class="stat-label">Refresh Pending</div><div class="stat-value" id="pendCount">—</div><div class="stat-sub">Click to view list</div></div>
+        </div>
+        <div class="stat-pill" onclick="showReportList('wip')">
+          <div class="stat-icon red"><i class="ti ti-tool"></i></div>
+          <div><div class="stat-label">WIP / In Dev</div><div class="stat-value" id="wipCount">—</div><div class="stat-sub">Click to view list</div></div>
+        </div>
+      </div>
+
+      <div class="filter-row" id="filterRow">
+        <div class="filter-chip active" onclick="filterDept('all')" data-dept="all">All Reports</div>
+        <div class="filter-chip csg-chip" onclick="filterDept('csg')" data-dept="csg">CSG</div>
+        <div class="filter-chip isg-chip" onclick="filterDept('isg')" data-dept="isg">ISG</div>
+        <div class="filter-chip care-chip" onclick="filterDept('care')" data-dept="care">Care</div>
+        <div class="filter-chip field-chip" onclick="filterDept('field')" data-dept="field">Field</div>
+        <div class="filter-chip rta-chip" onclick="filterDept('rta')" data-dept="rta">RTA &amp; Scheduling</div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:6px">
+          <span style="font-size:10px;color:var(--text3)">Freq:</span>
+          <div class="freq-chip active" onclick="filterFreq('all')" data-freq="all">All</div>
+          <div class="freq-chip" onclick="filterFreq('Daily')" data-freq="Daily">Daily</div>
+          <div class="freq-chip" onclick="filterFreq('Weekly')" data-freq="Weekly">Weekly</div>
+        </div>
+      </div>
+
+      <div class="sort-bar">
+        <span class="sort-label"><i class="ti ti-arrows-sort" style="font-size:12px"></i> Sort:</span>
+        <button class="sort-btn active" onclick="setSort('default')" data-sort="default">Default</button>
+        <button class="sort-btn" onclick="setSort('name')" data-sort="name">Name A–Z</button>
+        <button class="sort-btn" onclick="setSort('published')" data-sort="published">Published First</button>
+        <button class="sort-btn" onclick="setSort('dept')" data-sort="dept">By Dept</button>
+      </div>
+
+      <div id="allView">
+        <div class="section-header">
+          <div class="section-title"><div class="section-bar" style="background:var(--dell-blue2)"></div>Featured Reports<span class="section-count" id="featCount"></span></div>
+          <div class="view-all" onclick="showReportList('all')">View all <i class="ti ti-chevron-right" style="font-size:10px"></i></div>
+        </div>
+        <div class="featured-scroll" id="featuredGrid"></div>
+        <div id="deptSections"></div>
+      </div>
+
+      <div id="searchView" class="hidden">
+        <div class="section-header">
+          <div class="section-title"><div class="section-bar" style="background:var(--dell-blue2)"></div>Search Results<span class="section-count" id="searchCount"></span></div>
+        </div>
+        <div class="report-grid" id="searchGrid"></div>
+        <div class="no-results hidden" id="noResults"><i class="ti ti-search-off" style="font-size:28px;margin-bottom:8px;display:block"></i>No reports found.</div>
+      </div>
+
+      <div id="favView" class="hidden">
+        <div class="section-header">
+          <div class="section-title"><div class="section-bar" style="background:#c9a600"></div>Favorites<span class="section-count" id="favCount"></span></div>
+          <span style="font-size:10px;color:var(--text3)">Click <i class="ti ti-star" style="font-size:11px"></i> on any card to add/remove</span>
+        </div>
+        <div class="report-grid" id="favGrid"></div>
+        <div class="no-results hidden" id="noFavs"><i class="ti ti-star-off" style="font-size:28px;margin-bottom:8px;display:block"></i>No favorites yet.</div>
+      </div>
+
+      <div id="recentView" class="hidden">
+        <div class="section-header">
+          <div class="section-title"><div class="section-bar" style="background:var(--isg)"></div>Recently Viewed</div>
+        </div>
+        <div class="report-grid" id="recentGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="overlayBg" onclick="closeOverlay()">
+  <div id="overlayContent" onclick="event.stopPropagation()"></div>
+</div>
+
+<script>
+const REPORTS=[
+  {name:"CSG Network Navigator",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"CSG CCO Offer Comparison Dashboard",dept:"CSG",status:"Completed",freq:"Daily",pub:"Published",day:"Everyday"},
+  {name:"CSG CCO Demand Comparison Dashboard",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"CSG CCO BMS Scorecard",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Wednesday"},
+  {name:"Digital First",dept:"CSG",status:"WIP",freq:"Daily",pub:"Pending",day:"Everyday"},
+  {name:"ESG FC (by channel)",dept:"ISG",status:"Completed",freq:"Weekly",pub:"Published",day:"Tuesday"},
+  {name:"Attrition Report",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Tuesday"},
+  {name:"Global MSP Trend Viewer",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"SFDC Email Viewer",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"SFDC Email Viewer (13 Charts)",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"CSG Trend (ML Forecasting)",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Tuesday"},
+  {name:"SL Breach (RCA)",dept:"ISG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Wednesday"},
+  {name:"SL Overlay PBI",dept:"ISG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"Call Curve",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"ISG Manual Logged Hours & Utilization",dept:"ISG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"ISG Cases per FTE",dept:"ISG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"Outage Report",dept:"Care",status:"Completed",freq:"Weekly",pub:"Published",day:"Tuesday"},
+  {name:"ISG LOB",dept:"ISG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"Productivity Report",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Wednesday"},
+  {name:"Social KPI Report",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"Attrition Report (ISG)",dept:"ISG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"Workload FC",dept:"ISG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"Workload Distribution/HC",dept:"ISG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"Custom Models",dept:"ISG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"ISG Performance Analysis",dept:"RTA",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"CPB Viewer",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"Tags Routed",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"SFDC Case Transfers",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"SLA-SLO Power BI (Visual)",dept:"ISG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Tuesday"},
+  {name:"CSG Partner Minimum",dept:"CSG",status:"Completed",freq:"Daily",pub:"Pending",day:"Tuesday"},
+  {name:"CSG Demand Dashboard",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"ISG Demand Dashboard",dept:"ISG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"CSG Capacity Viewer",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"CSG Headcount Details",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"Early Warning System (EWS)",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"CSG Outliers",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"Field Headcount and Dispatch",dept:"Field",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"Field HC & Dispatch (Excel)",dept:"Field",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"ISG/OSP",dept:"ISG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"Transfers (To View)",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"Transfers (From view and AHT View)",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"Forecast Viewer",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"ASU Variance Viewer",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"ESG Combined View",dept:"ISG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"EMAIL Queue KPI",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"Chat Unavailability",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"Global MSP Trend Viewer B",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Pending",day:"Monday"},
+  {name:"Global MSP Trend Viewer C",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"Voice Queue KPI",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"SFDC Chat Viewer",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"Chat with eWFM Plan",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"Chat Queue KPI",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"Retail Contact Rates",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"Voice Split Data",dept:"CSG",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"},
+  {name:"EPI HC Report",dept:"Care",status:"Completed",freq:"Weekly",pub:"Published",day:"Monday"}
+];
+
+const USAGE_DATA=[
+  {name:"ESG Combined View",dept:"ISG",opens:84,prev:67},
+  {name:"Voice Queue KPI",dept:"CSG",opens:71,prev:58},
+  {name:"Forecast Viewer",dept:"CSG",opens:65,prev:70},
+  {name:"Workload FC",dept:"ISG",opens:58,prev:45},
+  {name:"Outage Report",dept:"Care",opens:52,prev:48},
+  {name:"CSG CCO BMS Scorecard",dept:"CSG",opens:49,prev:42},
+  {name:"Attrition Report (ISG)",dept:"ISG",opens:44,prev:38},
+  {name:"Chat Queue KPI",dept:"CSG",opens:41,prev:44},
+  {name:"ISG Cases per FTE",dept:"ISG",opens:38,prev:32},
+  {name:"Retail Contact Rates",dept:"CSG",opens:36,prev:29}
+];
+const WEEKLY_OPENS=[42,55,48,63,71,59,84,76,90,82,88,95,102,88,96,112,104,120,108,98,115,125,119,108,112,130,118,125];
+const DEPT_OPENS={CSG:342,ISG:218,Care:87,Field:43,RTA:28};
+const COMMENTS_DB={"ESG Combined View":[
+  {author:"Prashant Dhamale",time:"May 20, 2026 · 10:32 AM",text:"Voice SL% for Storage IND in Q4 seems lower than expected — was there a plan revision mid-quarter?",type:"Discrepancy"},
+  {author:"Nikhil Pathade",time:"May 19, 2026 · 3:15 PM",text:"Offered Volume actuals for FY2027Q2 look incomplete. Could be a data refresh issue.",type:"Query"}
+]};
+
+const DEPT_CONFIG={
+  CSG:{label:"CSG",color:"var(--csg)",thumbClass:"thumb-csg",tagClass:"tag-csg",barColor:"#378add"},
+  ISG:{label:"ISG",color:"var(--isg)",thumbClass:"thumb-isg",tagClass:"tag-isg",barColor:"#7f77dd"},
+  Care:{label:"Care",color:"var(--care)",thumbClass:"thumb-care",tagClass:"tag-care",barColor:"#639922"},
+  Field:{label:"Field",color:"var(--field)",thumbClass:"thumb-field",tagClass:"tag-field",barColor:"#ba7517"},
+  RTA:{label:"RTA & Sched.",color:"var(--rta)",thumbClass:"thumb-rta",tagClass:"tag-rta",barColor:"#1d9e75"}
+};
+
+let favorites=new Set(["ESG Combined View","Voice Queue KPI","Forecast Viewer"]);
+let recentlyViewed=["ESG Combined View"];
+let currentSort="default",currentFreq="all",esgPage='landing',isLight=false;
+let selectedCommentTags=new Set(),selectedPriority="med";
+
+function normDept(d){if(!d)return"CSG";const u=d.toUpperCase();if(u.includes("SCHED")||u.includes("RTA"))return"RTA";if(u==="ISG")return"ISG";if(u==="CARE")return"Care";if(u==="FIELD")return"Field";return"CSG";}
+
+function toggleTheme(){isLight=!isLight;document.body.classList.toggle('light-mode',isLight);document.getElementById('topt-dark').classList.toggle('active',!isLight);document.getElementById('topt-light').classList.toggle('active',isLight);showToast(isLight?'Switched to Light Mode':'Switched to Dark Mode','info');}
+
+function thumbSVG(dk,barColor){const h=[40,28,50,35,42,30];const bars=h.map((v,i)=>`<rect x="${i*10}" y="${60-v}" width="7" height="${v}" rx="1" fill="${barColor}" opacity="${.4+i*.08}"/>`).join('');const pts=[0,8,16,24,32,40,48,56].map((x,i)=>`${x},${[22,18,28,14,20,10,16,12][i]}`).join(' ');return`<svg width="80" height="60" viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">${bars}<polyline points="${pts}" fill="none" stroke="${barColor}" stroke-width="1.5" opacity=".7"/><circle cx="40" cy="30" r="10" fill="none" stroke="${barColor}" stroke-width="1.5" opacity=".4" stroke-dasharray="19 44"/></svg>`;}
+
+function buildCard(r,featured=false){const dk=normDept(r.dept);const dc=DEPT_CONFIG[dk];const isPub=r.pub==="Published",isWIP=r.status==="WIP";const statusClass=isPub?"s-published":isWIP?"s-wip":"s-pending";const dotClass=isPub?"green":isWIP?"red":"amber";const statusLabel=isPub?"Published":isWIP?"WIP":"Refresh Pending";const isESG=r.name==="ESG Combined View";const isFav=favorites.has(r.name);return`<div class="report-card${featured?' featured':''}" onclick="${isESG?'openESGReport()':'addRecent(\''+r.name.replace(/'/g,"\\'")+'\')'}">
+  <button class="fav-btn${isFav?' fav-on':''}" onclick="event.stopPropagation();toggleFav('${r.name.replace(/'/g,"\\'")}',this)"><i class="ti ${isFav?'ti-star-filled':'ti-star'}" style="font-size:11px"></i></button>
+  <div class="card-thumb ${dc.thumbClass}"><div style="display:flex;gap:5px;padding:10px;width:100%;align-items:flex-end">${thumbSVG(dk,dc.barColor)}</div></div>
+  <div class="card-body">
+    <div class="dept-tag ${dc.tagClass}">${dc.label}</div>
+    <div class="card-name">${r.name}</div>
+    <div class="card-meta"><div class="status-chip ${statusClass}"><span class="s-dot ${dotClass}"></span>${statusLabel}</div><div class="freq-badge"><i class="ti ti-refresh" style="font-size:10px"></i>${r.freq}</div></div>
+    <div class="card-footer"><div class="pub-info"><i class="ti ti-calendar" style="font-size:11px"></i>${r.day}</div><button class="open-btn" onclick="event.stopPropagation();${isESG?'openESGReport()':'addRecent(\''+r.name.replace(/'/g,"\\'")+'\')'}"><i class="ti ti-external-link" style="font-size:10px"></i>Open</button></div>
+  </div>
+</div>`;}
+
+function toggleFav(name,btn){if(favorites.has(name)){favorites.delete(name);btn.classList.remove('fav-on');btn.querySelector('i').className='ti ti-star';showToast('Removed from Favorites','warn');}else{favorites.add(name);btn.classList.add('fav-on');btn.querySelector('i').className='ti ti-star-filled';showToast('Added to Favorites');}document.getElementById('nb-fav').textContent=favorites.size;}
+function addRecent(name){recentlyViewed=recentlyViewed.filter(n=>n!==name);recentlyViewed.unshift(name);if(recentlyViewed.length>5)recentlyViewed=recentlyViewed.slice(0,5);showToast('Opening: '+name,'info');}
+
+function initStats(){const pub=REPORTS.filter(r=>r.pub==="Published").length;const pend=REPORTS.filter(r=>r.pub==="Pending"&&r.status!=="WIP").length;const wip=REPORTS.filter(r=>r.status==="WIP").length;document.getElementById("pubCount").textContent=pub;document.getElementById("pendCount").textContent=pend;document.getElementById("wipCount").textContent=wip;["CSG","ISG","Care","Field","RTA"].forEach(dk=>{const count=REPORTS.filter(r=>normDept(r.dept)===dk).length;document.getElementById('nb-'+dk.toLowerCase()).textContent=count;});}
+
+function getSortedReports(list){const arr=[...list];if(currentSort==='name')return arr.sort((a,b)=>a.name.localeCompare(b.name));if(currentSort==='published')return arr.sort((a,b)=>(b.pub==="Published"?1:0)-(a.pub==="Published"?1:0));if(currentSort==='dept')return arr.sort((a,b)=>normDept(a.dept).localeCompare(normDept(b.dept)));return arr;}
+function getFreqFiltered(list){if(currentFreq==='all')return list;return list.filter(r=>r.freq===currentFreq);}
+function setSort(s){currentSort=s;document.querySelectorAll('.sort-btn').forEach(b=>b.classList.toggle('active',b.dataset.sort===s));buildDeptSections();}
+function filterFreq(f){currentFreq=f;document.querySelectorAll('.freq-chip').forEach(c=>c.classList.toggle('active',c.dataset.freq===f));buildDeptSections();buildFeatured();}
+
+function buildFeatured(){const feat=[REPORTS.find(r=>r.name==="ESG Combined View"),REPORTS.find(r=>r.name==="Voice Queue KPI"),REPORTS.find(r=>r.name==="Forecast Viewer")].filter(Boolean);const filtered=getFreqFiltered(feat);document.getElementById("featuredGrid").innerHTML=filtered.map(r=>buildCard(r,true)).join('');document.getElementById("featCount").textContent=`(${filtered.length})`;}
+
+function buildDeptSections(){const depts=["CSG","ISG","Care","Field","RTA"];const el=document.getElementById("deptSections");el.innerHTML=depts.map(dk=>{const dc=DEPT_CONFIG[dk];let reports=getSortedReports(getFreqFiltered(REPORTS.filter(r=>normDept(r.dept)===dk)));if(!reports.length)return'';return`<div class="dept-section" data-dept="${dk.toLowerCase()}"><div class="section-header"><div class="section-title"><div class="section-bar" style="background:${dc.color}"></div>${dk==="RTA"?"RTA & Scheduling":dk}<span class="section-count">(${reports.length})</span></div><div class="view-all" onclick="filterDept('${dk.toLowerCase()}')">View all <i class="ti ti-chevron-right" style="font-size:10px"></i></div></div><div class="report-grid">${reports.map(r=>buildCard(r)).join('')}</div></div>`;}).join('<div class="dept-divider"></div>');}
+
+function filterDept(dept){document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));const chip=document.querySelector(`[data-dept="${dept}"]`);if(chip)chip.classList.add('active');showMainView('allView');document.getElementById('searchInput').value='';const fh=document.querySelector('#allView > .section-header');const fg=document.getElementById('featuredGrid');if(dept==='all'){document.querySelectorAll('.dept-section').forEach(s=>s.style.display='');if(fh)fh.style.display='';fg.style.display='';}else{document.querySelectorAll('.dept-section').forEach(s=>{s.style.display=s.dataset.dept===dept?'':'none';});if(fh)fh.style.display='none';fg.style.display='none';}}
+
+function handleSearch(){const q=document.getElementById('searchInput').value.toLowerCase().trim();if(!q){showMainView('allView');filterDept('all');return;}showMainView('searchView');let results=getSortedReports(getFreqFiltered(REPORTS.filter(r=>r.name.toLowerCase().includes(q)||r.dept.toLowerCase().includes(q))));const grid=document.getElementById('searchGrid'),noRes=document.getElementById('noResults');if(results.length){grid.innerHTML=results.map(r=>buildCard(r)).join('');grid.classList.remove('hidden');noRes.classList.add('hidden');document.getElementById('searchCount').textContent=`(${results.length} found)`;}else{grid.classList.add('hidden');noRes.classList.remove('hidden');document.getElementById('searchCount').textContent='';}}
+
+function navClick(section){document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.getElementById('nav-'+section).classList.add('active');document.getElementById('searchInput').value='';if(section==='fav'){showMainView('favView');const favReports=getSortedReports(REPORTS.filter(r=>favorites.has(r.name)));const noFavs=document.getElementById('noFavs');if(favReports.length){document.getElementById('favGrid').innerHTML=favReports.map(r=>buildCard(r)).join('');document.getElementById('favGrid').classList.remove('hidden');noFavs.classList.add('hidden');}else{document.getElementById('favGrid').classList.add('hidden');noFavs.classList.remove('hidden');}document.getElementById('favCount').textContent=`(${favReports.length})`;}else if(section==='recent'){showMainView('recentView');const rec=recentlyViewed.map(n=>REPORTS.find(r=>r.name===n)).filter(Boolean);document.getElementById('recentGrid').innerHTML=rec.length?rec.map(r=>buildCard(r)).join(''):`<div class="no-results"><i class="ti ti-history" style="font-size:28px;margin-bottom:8px;display:block"></i>No recently viewed reports yet.</div>`;}else if(section==='home'){showMainView('allView');filterDept('all');}else{filterDept(section);showMainView('allView');}}
+
+function showMainView(id){['allView','searchView','favView','recentView'].forEach(v=>{const el=document.getElementById(v);if(el)el.classList.toggle('hidden',v!==id);});}
+
+function showReportList(type){let title,reports;if(type==='all'){title='All Reports';reports=REPORTS;}else if(type==='published'){title='Published Reports';reports=REPORTS.filter(r=>r.pub==="Published");}else if(type==='pending'){title='Refresh Pending Reports';reports=REPORTS.filter(r=>r.pub==="Pending"&&r.status!=="WIP");}else{title='WIP Reports';reports=REPORTS.filter(r=>r.status==="WIP");}reports=getSortedReports(reports);const html=`<div class="report-list-modal"><button class="modal-close" onclick="closeOverlay()"><i class="ti ti-x"></i></button><div class="rlist-header"><div class="rlist-title"><i class="ti ti-file-analytics" style="font-size:15px;color:var(--dell-blue2)"></i>${title}<span style="font-size:11px;color:var(--text3);font-weight:400;margin-left:4px">(${reports.length})</span></div></div><div class="rlist-body">${reports.map(r=>{const dk=normDept(r.dept);const dc=DEPT_CONFIG[dk];const isPub=r.pub==="Published",isWIP=r.status==="WIP";return`<div class="rlist-item"><div style="flex:1;min-width:0"><div class="rlist-name">${r.name}</div><div class="rlist-meta"><span class="dept-tag ${dc.tagClass}" style="margin-bottom:0">${dc.label}</span><span class="status-chip ${isPub?'s-published':isWIP?'s-wip':'s-pending'}"><span class="s-dot ${isPub?'green':isWIP?'red':'amber'}"></span>${isPub?"Published":isWIP?"WIP":"Refresh Pending"}</span><span>${r.freq} · ${r.day}</span></div></div><button class="open-btn" style="flex-shrink:0;margin-left:8px" onclick="${r.name==='ESG Combined View'?'closeOverlay();openESGReport()':'addRecent(\''+r.name.replace(/'/g,"\\'")+'\')'}" ><i class="ti ti-external-link" style="font-size:10px"></i>Open</button></div>`;}).join('')}</div></div>`;document.getElementById('overlayContent').innerHTML=html;document.getElementById('overlayBg').classList.remove('hidden');}
+
+/* ── ESG ── */
+function openESGReport(){esgPage='landing';renderESGModal();document.getElementById('overlayBg').classList.remove('hidden');addRecent('ESG Combined View');}
+function renderESGModal(){document.getElementById('overlayContent').innerHTML=esgPage==='landing'?buildESGLanding():esgPage==='consolidated'?buildESGConsolidated():buildESGInteract();}
+
+function buildESGLanding(){return`<div class="modal" style="position:relative"><button class="modal-close" onclick="closeOverlay()"><i class="ti ti-x"></i></button><div class="esg-hero"><svg style="position:absolute;top:0;right:0;width:52%;height:100%;opacity:.18" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg"><path d="M0,100 Q100,20 200,80 T400,60" stroke="white" stroke-width="1" fill="none"/><path d="M0,130 Q100,50 200,110 T400,90" stroke="white" stroke-width="1" fill="none"/><path d="M0,160 Q100,80 200,140 T400,120" stroke="white" stroke-width="1" fill="none"/><path d="M50,0 Q150,100 100,200" stroke="white" stroke-width=".7" fill="none"/><path d="M200,0 Q300,100 250,200" stroke="white" stroke-width=".7" fill="none"/><path d="M350,0 Q450,100 400,200" stroke="white" stroke-width=".7" fill="none"/></svg><div style="position:relative;z-index:2"><div class="esg-hero-pill"><svg width="30" height="20" viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg"><circle cx="35" cy="35" r="30" fill="none" stroke="#0076CE" stroke-width="5"/><text x="35" y="46" text-anchor="middle" font-family="Georgia,serif" font-size="26" font-weight="900" fill="#0076CE">Dell</text></svg><div class="esg-hero-pill-title">Offered Volume &amp; Assumptions Dashboard (ESG)</div></div><div class="esg-hero-nav"><button class="esg-nav-btn esg-active">Landing Page</button><button class="esg-nav-btn" onclick="esgPage='consolidated';renderESGModal()">Consolidated View</button><button class="esg-nav-btn" onclick="esgPage='interact';renderESGModal()"><i class="ti ti-message-circle" style="font-size:11px"></i> Comments &amp; Email</button></div></div></div><div class="esg-body"><div><div class="esg-section-title"><i class="ti ti-info-circle" style="color:#ef9f27"></i>Report Overview</div><div class="esg-overview-text">Comprehensive view of Contact Centre performance by monitoring Offered Volume and planning Assumptions against weekly and quarterly targets across different plans, enabling early identification of risks and performance gaps.</div><div class="esg-section-title"><i class="ti ti-list" style="color:#ef9f27"></i>Scope of Report</div><div class="esg-bullet">Quarterly &amp; Weekly tracking</div><div class="esg-bullet">Multi-plan comparison</div><div class="esg-bullet">Target vs Actual visibility</div><div style="margin-top:14px"><div class="esg-section-title"><i class="ti ti-target" style="color:#e24b4a"></i>Key Metrics Covered</div><div class="esg-metrics-grid"><span class="esg-metric-tag">Offered Volume</span><span class="esg-metric-tag">AHT</span><span class="esg-metric-tag">SL%</span><span class="esg-metric-tag">IBU%</span><span class="esg-metric-tag">Outage%</span><span class="esg-metric-tag">HC</span></div></div></div><div><div class="esg-meta-card"><div class="esg-meta-icon" style="background:rgba(127,119,221,.15);color:#a8a4e8"><i class="ti ti-calendar-repeat"></i></div><div><div class="esg-meta-label">Cadence</div><div class="esg-meta-value">Weekly</div></div></div><div class="esg-meta-card"><div class="esg-meta-icon" style="background:rgba(0,125,184,.15);color:#6ab0ee"><i class="ti ti-refresh"></i></div><div><div class="esg-meta-label">Last Refreshed</div><div class="esg-meta-value">May 18, 2026</div></div></div><div class="esg-meta-card"><div class="esg-meta-icon" style="background:rgba(186,117,23,.15);color:#ef9f27"><i class="ti ti-database"></i></div><div><div class="esg-meta-label">Database</div><div class="esg-meta-value" style="font-size:11px">Voice Queue KPI<br>Forecast Viewer</div></div></div><div class="esg-meta-card"><div class="esg-meta-icon" style="background:rgba(226,75,74,.12);color:#e24b4a"><i class="ti ti-mail"></i></div><div><div class="esg-meta-label">Support</div><div class="esg-meta-value" style="font-size:11px">AA_Modernization_team</div></div></div></div></div><div class="esg-footer"><div style="font-size:10px;color:var(--text3)"><i class="ti ti-tag" style="font-size:11px"></i> ISG · Weekly · Published</div><button class="esg-proceed-btn" onclick="esgPage='consolidated';renderESGModal()">View Consolidated Data <i class="ti ti-arrow-right" style="font-size:13px"></i></button></div></div>`;}
+
+function buildESGConsolidated(){const qCols=["FY2026Q1","FY2026Q2","FY2026Q3","FY2026Q4","FY2027Q1","FY2027Q2"];const rows=[{q:"Storage Pro/Core Japan",a:[4076,4122,3802,3991,3569,425],p:[4251,4802,4056,3963,3944,3854],aht:[14.5,11.6,12.2,12.0,15.8,14.8],sl:["87%","90%","88%","90%","92%","89%"],ibu:["23%","24%","22%","25%","22%","31%"],out:["10%","9%","13%","12%","12%","23%"]},{q:"Storage IND",a:[11569,10823,8701,9693,9273,1347],p:[10059,11629,11006,10303,10416,9319],aht:[22.5,24.4,24.5,24.9,22.6,22.6],sl:["90%","90%","90%","89%","90%","91%"],ibu:["38%","40%","45%","43%","43%","40%"],out:["9%","15%","12%","10%","18%","12%"]}];let tbody='';rows.forEach(r=>{tbody+=`<tr class="group-header"><td colspan="${qCols.length+1}" class="left" style="padding:5px 7px">${r.q}</td></tr>`;tbody+=`<tr><td class="row-header left">Total Offered (Actuals)</td>${r.a.map(v=>`<td class="val-blue">${v.toLocaleString()}</td>`).join('')}</tr>`;const pcts=r.a.map((v,i)=>r.p[i]?Math.round(v/r.p[i]*100)+'%':'—');tbody+=`<tr><td class="row-header left">Total Offered (Plan)</td>${r.p.map(v=>`<td>${v.toLocaleString()}</td>`).join('')}</tr>`;tbody+=`<tr><td class="row-header left">Total Offered %</td>${pcts.map(v=>`<td>${v}</td>`).join('')}</tr>`;tbody+=`<tr><td class="row-header left">Voice AHT (Actuals)</td>${r.aht.map(v=>`<td class="val-red">${v}</td>`).join('')}</tr>`;tbody+=`<tr><td class="row-header left">Voice SL% (Actuals)</td>${r.sl.map(v=>`<td class="val-green">${v}</td>`).join('')}</tr>`;tbody+=`<tr><td class="row-header left">IBU (Actuals)</td>${r.ibu.map(v=>`<td class="val-blue">${v}</td>`).join('')}</tr>`;tbody+=`<tr><td class="row-header left">Outage (Actuals)</td>${r.out.map(v=>`<td class="val-red">${v}</td>`).join('')}</tr>`;});return`<div class="modal" style="position:relative;max-width:900px"><button class="modal-close" onclick="closeOverlay()"><i class="ti ti-x"></i></button><div class="esg-cons-header"><div class="last-refresh">Last Refresh<br><strong style="color:var(--text)">May 18, 2026</strong></div><div class="esg-cons-title">Consolidated View — Assumptions and Offered (QoQ and WoW)</div><button class="clear-btn">Clear all slicers</button></div><div class="filter-grid">${["Combined Queue","Queue Code","Fiscal Year","Fiscal Quarter","Fiscal Week","Business Partner","Region","Sub Region","LOB","Voice / Non-Voice","Plan Name","Status"].map(f=>`<div><div class="filter-label">${f}</div><select class="filter-select"><option>All</option></select></div>`).join('')}</div><div class="cons-body"><table class="cons-table"><thead><tr><th class="left" style="min-width:170px">Combined Queue Name</th>${qCols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${tbody}</tbody></table></div><div style="padding:9px 12px;border-top:1px solid var(--border);display:flex;gap:7px;align-items:center;flex-wrap:wrap"><button class="esg-nav-btn" style="background:rgba(0,125,184,.12);border-color:rgba(0,125,184,.3);color:var(--dell-blue2)" onclick="esgPage='landing';renderESGModal()"><i class="ti ti-arrow-left" style="font-size:11px"></i> Back</button><button class="esg-nav-btn" style="background:rgba(226,75,74,.1);border-color:rgba(226,75,74,.3);color:#e24b4a" onclick="esgPage='interact';renderESGModal()"><i class="ti ti-message-circle" style="font-size:11px"></i> Add Comment / Email</button><span style="font-size:10px;color:var(--text3)">Actuals till FY27Q2</span></div></div>`;}
+
+function buildESGInteract(){
+  const existing=(COMMENTS_DB["ESG Combined View"]||[]);
+  const existingHTML=existing.map(c=>{
+    const badgeClass=c.type==="Discrepancy"?"cb-discrepancy":c.type==="Query"?"cb-query":"cb-feedback";
+    return`<div class="comment-item"><div class="comment-meta"><div class="comment-author"><div style="width:22px;height:22px;border-radius:50%;background:rgba(0,125,184,.2);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(--dell-blue2)">${c.author.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>${c.author}</div><div style="display:flex;align-items:center;gap:6px"><span class="comment-badge ${badgeClass}">${c.type}</span><span class="comment-time">${c.time}</span></div></div><div class="comment-text">${c.text}</div></div>`;
+  }).join('');
+  return`<div class="modal" style="position:relative;max-width:820px">
+    <button class="modal-close" onclick="closeOverlay()"><i class="ti ti-x"></i></button>
+    <div class="esg-hero" style="padding:22px 30px 28px">
+      <svg style="position:absolute;top:0;right:0;width:40%;height:100%;opacity:.12" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg"><path d="M0,100 Q100,20 200,80 T400,60" stroke="white" stroke-width="1.5" fill="none"/><path d="M0,150 Q120,60 240,130 T400,110" stroke="white" stroke-width="1" fill="none"/></svg>
+      <div style="position:relative;z-index:2">
+        <div style="font-size:11px;color:rgba(255,255,255,.65);margin-bottom:4px">ESG Combined View</div>
+        <div style="font-size:16px;font-weight:600;color:#fff;margin-bottom:10px">Comments &amp; Escalation</div>
+        <div class="esg-hero-nav">
+          <button class="esg-nav-btn" onclick="esgPage='landing';renderESGModal()"><i class="ti ti-arrow-left" style="font-size:11px"></i> Landing</button>
+          <button class="esg-nav-btn" onclick="esgPage='consolidated';renderESGModal()">Consolidated View</button>
+          <button class="esg-nav-btn esg-active"><i class="ti ti-message-circle" style="font-size:11px"></i> Comments &amp; Email</button>
+        </div>
+      </div>
+    </div>
+    <div class="esg-panel-tabs">
+      <div class="esg-panel-tab ptab-active" id="ptab-comments" onclick="switchPanelTab('comments')"><i class="ti ti-message-circle" style="font-size:13px"></i>Add Comment</div>
+      <div class="esg-panel-tab" id="ptab-email" onclick="switchPanelTab('email')"><i class="ti ti-send" style="font-size:13px"></i>Send Email to Owner</div>
+      <div style="margin-left:auto;padding:8px 14px;font-size:10px;color:var(--text3);display:flex;align-items:center;gap:4px"><i class="ti ti-message-dots" style="font-size:12px"></i>${existing.length} comment${existing.length!==1?'s':''} on this report</div>
+    </div>
+    <div id="panel-comments" class="esg-panel-body">
+      ${existing.length?`<div style="margin-bottom:14px">${existingHTML}</div>`:''}
+      <div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:8px;display:flex;align-items:center;gap:5px"><i class="ti ti-plus" style="font-size:13px;color:var(--dell-blue2)"></i>New Comment</div>
+      <div class="comment-input-wrap">
+        <textarea id="commentText" placeholder="Describe the discrepancy, data issue or observation you noticed in this report..."></textarea>
+        <div class="comment-actions">
+          <div class="comment-tag-row">
+            <span style="font-size:9.5px;color:var(--text3);margin-right:2px">Tag:</span>
+            <button class="ctag" onclick="toggleCTag(this,'Discrepancy')">Discrepancy</button>
+            <button class="ctag" onclick="toggleCTag(this,'Query')">Query</button>
+            <button class="ctag" onclick="toggleCTag(this,'Feedback')">Feedback</button>
+          </div>
+          <button class="send-comment-btn" onclick="postComment()"><i class="ti ti-send" style="font-size:11px"></i>Post</button>
+        </div>
+      </div>
+    </div>
+    <div id="panel-email" class="esg-panel-body hidden">
+      <div style="background:rgba(0,125,184,.07);border:1px solid rgba(0,125,184,.2);border-radius:7px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--text2);display:flex;align-items:flex-start;gap:8px"><i class="ti ti-info-circle" style="font-size:14px;color:var(--dell-blue2);flex-shrink:0;margin-top:1px"></i>This email will be sent to the report owner at <strong>AA_Modernization_team</strong>. Use this to flag a data discrepancy or request a correction.</div>
+      <div class="email-form-row"><div class="email-form-label">FROM</div><input class="email-form-input" value="Hrishikesh Yadav &lt;hrishikesh.yadav@dell.com&gt;" readonly style="color:var(--text3)"></div>
+      <div class="email-form-row"><div class="email-form-label">TO</div><input class="email-form-input" value="AA_Modernization_team@dell.com" readonly style="color:var(--text3)"></div>
+      <div class="email-form-row"><div class="email-form-label">CC</div><input class="email-form-input" id="emailCc" placeholder="Add CC recipients (comma separated)"></div>
+      <div class="email-form-row"><div class="email-form-label">SUBJECT</div><input class="email-form-input" id="emailSubject" value="[ESG Combined View] Data Discrepancy Flag — May 2026"></div>
+      <div class="email-form-row"><div class="email-form-label">PRIORITY</div>
+        <div class="email-priority-row">
+          <button class="eprio low" onclick="setPrio(this,'low')">Low</button>
+          <button class="eprio med eprio-on" id="prio-med" onclick="setPrio(this,'med')">Medium</button>
+          <button class="eprio high" onclick="setPrio(this,'high')">High</button>
+        </div>
+      </div>
+      <div class="email-form-row"><div class="email-form-label">MESSAGE</div><textarea class="email-form-textarea" id="emailBody" placeholder="Describe the issue in detail — include the metric, date range, and expected vs observed values...">Hi Team,
+
+I noticed a potential discrepancy in the ESG Combined View report (last refreshed May 18, 2026).
+
+Please review the following:
+- Metric: 
+- Date / Quarter: 
+- Expected Value: 
+- Observed Value: 
+- Impact: 
+
+Please acknowledge and advise on the correction timeline.
+
+Regards,
+Hrishikesh Yadav</textarea></div>
+      <div style="display:flex;justify-content:flex-end;gap:8px"><button class="sort-btn" onclick="switchPanelTab('comments')">Cancel</button><button class="email-send-btn" onclick="sendEmail()"><i class="ti ti-send" style="font-size:12px"></i>Send Email</button></div>
+    </div>
+  </div>`;}
+
+function switchPanelTab(tab){document.querySelectorAll('.esg-panel-tab').forEach(t=>t.classList.remove('ptab-active'));document.getElementById('ptab-'+tab).classList.add('ptab-active');['comments','email'].forEach(t=>{const el=document.getElementById('panel-'+t);if(el)el.classList.toggle('hidden',t!==tab);});}
+
+function toggleCTag(el,tag){el.classList.toggle('ctag-on');if(el.classList.contains('ctag-on'))selectedCommentTags.add(tag);else selectedCommentTags.delete(tag);}
+
+function postComment(){const txt=document.getElementById('commentText');if(!txt||!txt.value.trim()){showToast('Please enter a comment first','warn');return;}const tags=[...selectedCommentTags];const type=tags.length?tags[0]:'Feedback';if(!COMMENTS_DB["ESG Combined View"])COMMENTS_DB["ESG Combined View"]=[];COMMENTS_DB["ESG Combined View"].unshift({author:"Hrishikesh Yadav",time:"Just now",text:txt.value.trim(),type:type});selectedCommentTags.clear();esgPage='interact';renderESGModal();showToast('Comment posted successfully');}
+
+function setPrio(el,p){selectedPriority=p;document.querySelectorAll('.eprio').forEach(e=>{e.classList.remove('eprio-on');});el.classList.add('eprio-on');}
+
+function sendEmail(){const subj=document.getElementById('emailSubject');const body=document.getElementById('emailBody');if(!subj||!body||!body.value.trim()){showToast('Please fill in the message','warn');return;}showToast('Email sent to AA_Modernization_team');closeOverlay();}
+
+/* ── USAGE METRICS ── */
+function openUsageMetrics(){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('nav-usage').classList.add('active');
+  const totalOpens=USAGE_DATA.reduce((s,r)=>s+r.opens,0);
+  const maxOpens=USAGE_DATA[0].opens;
+  const deptColors={"CSG":"#378add","ISG":"#7f77dd","Care":"#639922","Field":"#ba7517","RTA":"#1d9e75"};
+  const topRows=USAGE_DATA.map((r,i)=>{
+    const pct=Math.round(r.opens/maxOpens*100);
+    const trend=r.opens>r.prev?`<span class="trend-up"><i class="ti ti-trending-up" style="font-size:10px"></i> +${r.opens-r.prev}</span>`:`<span class="trend-dn"><i class="ti ti-trending-down" style="font-size:10px"></i> ${r.opens-r.prev}</span>`;
+    const rankClass=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-other';
+    const dc=DEPT_CONFIG[normDept(r.dept)];
+    return`<tr>
+      <td><div class="usage-rank ${rankClass}">${i+1}</div></td>
+      <td><div style="font-size:11px;font-weight:500;color:var(--text)">${r.name}</div></td>
+      <td><span class="dept-tag ${dc.tagClass}" style="margin-bottom:0">${r.dept}</span></td>
+      <td style="font-weight:600;color:var(--text);font-size:12px">${r.opens}</td>
+      <td>${trend}</td>
+      <td class="usage-bar-cell"><div class="ubar-track"><div class="ubar-fill" style="width:${pct}%;background:${deptColors[r.dept]||'#378add'}"></div></div></td>
+    </tr>`;
+  }).join('');
+
+  const deptCards=Object.entries(DEPT_OPENS).map(([dk,v])=>{
+    const col=deptColors[dk]||'#378add';
+    const tot=Object.values(DEPT_OPENS).reduce((a,b)=>a+b,0);
+    const pct=Math.round(v/tot*100);
+    return`<div class="dept-usage-card"><div class="du-val">${v}</div><div class="du-lbl">${dk} opens</div><div class="du-bar" style="background:${col};width:${pct}%;min-width:20%"></div></div>`;
+  }).join('');
+
+  const maxW=Math.max(...WEEKLY_OPENS);
+  const weekLabels=["W1","W2","W3","W4","W5","W6","W7","W8","W9","W10","W11","W12","W13","W14","W15","W16","W17","W18","W19","W20","W21","W22","W23","W24","W25","W26","W27","W28"];
+  const last8=WEEKLY_OPENS.slice(-8);const last8L=weekLabels.slice(-8);
+  const barHTML=last8.map((v,i)=>{const h=Math.round(v/maxW*52);return`<div class="wc-bar-wrap"><div class="wc-val">${v}</div><div class="wc-bar" style="height:${h}px;background:${i===last8.length-1?'var(--dell-blue2)':'rgba(0,152,219,.45)'}"></div><div class="wc-lbl">${last8L[i]}</div></div>`;}).join('');
+
+  const html=`<div class="usage-modal">
+    <button class="modal-close" onclick="closeOverlay()"><i class="ti ti-x"></i></button>
+    <div class="usage-header">
+      <div class="usage-header-left">
+        <div style="width:36px;height:36px;border-radius:9px;background:rgba(0,125,184,.15);display:flex;align-items:center;justify-content:center"><i class="ti ti-chart-bar" style="font-size:18px;color:var(--dell-blue2)"></i></div>
+        <div><div class="usage-title">Usage Metrics</div><div class="usage-subtitle">May 2026 · Report open activity across all departments</div></div>
+      </div>
+      <div style="font-size:10px;color:var(--text3);text-align:right">Last updated<br><strong style="color:var(--text)">May 23, 2026</strong></div>
+    </div>
+    <div class="usage-body">
+      <div class="usage-kpi-row">
+        <div class="ukpi"><div class="ukpi-val">${totalOpens}</div><div class="ukpi-lbl">Total Opens This Month</div><div class="ukpi-trend trend-up"><i class="ti ti-trending-up" style="font-size:10px"></i> +18% vs Apr</div></div>
+        <div class="ukpi"><div class="ukpi-val">84</div><div class="ukpi-lbl">Most Opened Report</div><div class="ukpi-trend" style="color:var(--text3)">ESG Combined View</div></div>
+        <div class="ukpi"><div class="ukpi-val">26</div><div class="ukpi-lbl">Active Reports</div><div class="ukpi-trend trend-up"><i class="ti ti-trending-up" style="font-size:10px"></i> +3 vs Apr</div></div>
+        <div class="ukpi"><div class="ukpi-val">27.4</div><div class="ukpi-lbl">Avg Opens / Report</div><div class="ukpi-trend trend-dn"><i class="ti ti-trending-down" style="font-size:10px"></i> -2.1 vs Apr</div></div>
+      </div>
+
+      <div class="usage-section-title"><i class="ti ti-calendar" style="font-size:13px;color:var(--dell-blue2)"></i>Weekly Open Trend (Last 8 Weeks)</div>
+      <div class="weekly-chart"><div class="wc-bars">${barHTML}</div></div>
+
+      <div class="usage-section-title" style="margin-top:16px"><i class="ti ti-building" style="font-size:13px;color:var(--dell-blue2)"></i>Opens by Department</div>
+      <div class="dept-usage-grid">${deptCards}</div>
+
+      <div class="usage-section-title"><i class="ti ti-trophy" style="font-size:13px;color:#c9a600"></i>Top 10 Most Opened Reports — May 2026</div>
+      <table class="usage-table">
+        <thead><tr><th style="width:28px">#</th><th>Report Name</th><th>Dept</th><th>Opens</th><th>vs Last Month</th><th style="width:130px">Share</th></tr></thead>
+        <tbody>${topRows}</tbody>
+      </table>
+    </div>
+  </div>`;
+  document.getElementById('overlayContent').innerHTML=html;
+  document.getElementById('overlayBg').classList.remove('hidden');
+}
+
+function closeOverlay(){document.getElementById('overlayBg').classList.add('hidden');document.getElementById('overlayContent').innerHTML='';}
+function toggleNotif(){document.getElementById('notifDropdown').classList.toggle('hidden');}
+function clearNotif(){document.getElementById('notifDropdown').classList.add('hidden');const b=document.getElementById('notifBadge');if(b)b.style.display='none';}
+
+let toastTimer;
+function showToast(msg,type='info'){let t=document.querySelector('.toast');if(t)t.remove();const icon=type==='warn'?'ti-alert-triangle':type==='info'?'ti-info-circle':'ti-circle-check';const color=type==='warn'?'color:#cf8a10':type==='info'?'color:var(--dell-blue2)':'color:#4a9e1a';t=document.createElement('div');t.className='toast';t.innerHTML=`<i class="ti ${icon}" style="font-size:16px;${color}"></i><span>${msg}</span>`;document.body.appendChild(t);clearTimeout(toastTimer);toastTimer=setTimeout(()=>{if(t.parentNode)t.parentNode.removeChild(t);},2800);}
+
+document.addEventListener('click',function(e){const nb=document.getElementById('notifBtn');const nd=document.getElementById('notifDropdown');if(nb&&!nb.contains(e.target)&&nd&&!nd.classList.contains('hidden'))nd.classList.add('hidden');});
+
+initStats();buildFeatured();buildDeptSections();
+</script>
